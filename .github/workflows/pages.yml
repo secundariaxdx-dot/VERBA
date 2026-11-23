@@ -1,17 +1,23 @@
-name: Deploy VERBA to GitHub Pages
+name: Build web app (GitHub Pages)
 
+# Rebuilds docs/ whenever the app's source changes and commits it, so
+# GitHub Pages ("Deploy from a branch: main / root") always serves the latest version.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "index.html"
+      - "404.html"
+      - ".nojekyll"
+      - "**.md"
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: build-pages
   cancel-in-progress: true
 
 jobs:
@@ -23,23 +29,18 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - id: pages
-        uses: actions/configure-pages@v5
       - run: npm ci
       - run: npm test
       - run: node scripts/build-pages.mjs
-        env:
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Commit the rebuilt site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs index.html 404.html .nojekyll
+          if git diff --cached --quiet; then
+            echo "Site already up to date."
+          else
+            git commit -m "Rebuild web app"
+            git pull --rebase --autostash
+            git push
+          fi

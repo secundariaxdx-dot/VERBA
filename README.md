@@ -6,13 +6,13 @@ VERBA measures your level in each skill separately, remembers every mistake, bui
 
 ## Use it on the web (GitHub Pages)
 
-VERBA is published automatically to **https://secundariaxdx-dot.github.io/VERBA/** on every push to `main` (workflow: `.github/workflows/pages.yml`).
+Open **https://secundariaxdx-dot.github.io/VERBA/** (it redirects to the app in `/VERBA/docs/`).
 
-One-time setup: in the repository go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
+GitHub Pages serves this repository from **main / (root)**. The built app lives in `docs/`, and `index.html` at the root redirects to it. The workflow `.github/workflows/pages.yml` rebuilds `docs/` automatically whenever the source changes. To rebuild by hand: `npm run build:pages`.
 
-On a phone, open the link and add it to the home screen to use VERBA as an app (iPhone: Safari → Share → *Add to Home Screen*; Android: Chrome → *Install app*). Progress is stored on each device. To move progress between devices, use Settings → Export / Import backup.
+On a phone, open the link and add it to the home screen to use VERBA as an app (iPhone: Safari → Share → *Add to Home Screen*; Android: Chrome → *Install app*). Progress is stored on each device. To move it to another device, use Settings → Export / Import backup.
 
-GitHub Pages has no server, so the web version always uses the offline tutor and writing analyser. Claude is available only when you run VERBA yourself with a key (see below). To build the static site locally: `BASE_PATH=/VERBA npm run build:pages` (output in `out/`).
+GitHub Pages has no server, so the web version always uses the offline tutor and writing analyser. Claude is available only when you run VERBA yourself with a key (see below).
 
 ## Run it locally
 

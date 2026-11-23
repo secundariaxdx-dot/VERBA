@@ -1,10 +1,9 @@
 node_modules/
 .next/
-out/
 next-env.d.ts
 *.tsbuildinfo
 .env*.local
 .env
 e2e-failure.png
-out/
 .api-disabled/
+out/
