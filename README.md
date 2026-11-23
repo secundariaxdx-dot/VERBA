@@ -4,6 +4,16 @@
 
 VERBA measures your level in each skill separately, remembers every mistake, builds a daily plan around your time and exam date, and adapts as you improve. It works fully offline in the browser. Claude can be switched on for the AI tutor and examiner-style writing feedback.
 
+## Use it on the web (GitHub Pages)
+
+VERBA is published automatically to **https://secundariaxdx-dot.github.io/VERBA/** on every push to `main` (workflow: `.github/workflows/pages.yml`).
+
+One-time setup: in the repository go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
+
+On a phone, open the link and add it to the home screen to use VERBA as an app (iPhone: Safari → Share → *Add to Home Screen*; Android: Chrome → *Install app*). Progress is stored on each device. To move progress between devices, use Settings → Export / Import backup.
+
+GitHub Pages has no server, so the web version always uses the offline tutor and writing analyser. Claude is available only when you run VERBA yourself with a key (see below). To build the static site locally: `BASE_PATH=/VERBA npm run build:pages` (output in `out/`).
+
 ## Run it locally
 
 Requirements: Node.js 20 or newer.

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Download, Sparkles, Trash2, Upload } from "lucide-react";
 import type { EnglishVariety, Profile } from "@/domain/types";
 import { useVerba, snapshot, type VerbaData } from "@/store/verba";
-import { aiAvailable } from "@/services/ai";
+import { STATIC_SITE, aiAvailable } from "@/services/ai";
 import { buildDemoData } from "@/data/demo";
 import { Badge, Button, ButtonLink, Card, CardHeader, Chip, Field, PageHeader, inputCls } from "@/components/ui/primitives";
 
@@ -103,7 +103,9 @@ export default function Settings() {
           <p className="text-[14px] leading-relaxed text-ink-2">
             {ai
               ? "The AI tutor and examiner-style writing feedback use Claude through VERBA’s server. Your API key stays on the server and is never sent to the browser."
-              : "Everything works without AI: lessons, exercises, the offline tutor and a rule-based writing analyser. To enable Claude, set ANTHROPIC_API_KEY in .env.local and restart the server."}
+              : STATIC_SITE
+                ? "This is the web version on GitHub Pages, which has no server, so it uses VERBA’s offline tutor and writing analyser. Everything else works the same. To use Claude, run VERBA on your computer with ANTHROPIC_API_KEY (see the README)."
+                : "Everything works without AI: lessons, exercises, the offline tutor and a rule-based writing analyser. To enable Claude, set ANTHROPIC_API_KEY in .env.local and restart the server."}
           </p>
         </Card>
 

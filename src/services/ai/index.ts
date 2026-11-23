@@ -9,7 +9,11 @@ import { bandFor } from "@/engine/levels";
  */
 let status: Promise<boolean> | null = null;
 
+/** The GitHub Pages build has no server routes, so AI is always off there. */
+export const STATIC_SITE = process.env.NEXT_PUBLIC_STATIC === "1";
+
 export function aiAvailable(): Promise<boolean> {
+  if (STATIC_SITE) return Promise.resolve(false);
   status ??= fetch("/api/ai")
     .then((r) => (r.ok ? r.json() : { enabled: false }))
     .then((j: { enabled: boolean }) => Boolean(j.enabled))

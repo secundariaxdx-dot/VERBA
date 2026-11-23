@@ -68,7 +68,7 @@ try {
 
   console.log("Daily lesson (full flow)");
   await page.getByRole("link", { name: /Start lesson|Retake lesson/ }).click();
-  await page.waitForURL(/lessons\?id=/, { waitUntil: "commit" });
+  await page.waitForURL(/lessons\/?\?id=/, { waitUntil: "commit" });
   await page.getByRole("button", { name: /See examples/ }).click();
   await page.getByRole("button", { name: /Practise/ }).click();
   async function answerAll() {

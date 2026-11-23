@@ -10,7 +10,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "e2e": "node e2e/smoke.mjs"
+    "e2e": "node e2e/smoke.mjs",
+    "build:pages": "node scripts/build-pages.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.12.0",
