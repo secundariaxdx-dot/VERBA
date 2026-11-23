@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/*
+ * VERBA design tokens
+ * Warm cream paper, espresso ink, one burnt-orange accent.
+ * Status colours are muted and reserved for right/wrong feedback.
+ */
+@theme {
+  --color-cream: #f3ebdd;
+  --color-sand: #e9dfd0;
+  --color-sand-2: #dfd2bf;
+  --color-card: #fbf7f0;
+  --color-paper: #fffdf9;
+  --color-line: #e3d7c5;
+  --color-line-2: #d3c4ae;
+
+  --color-ink: #30251f;
+  --color-ink-2: #574639;
+  --color-muted: #806d5c;
+  --color-faint: #a8977f;
+
+  --color-accent: #c65d32;
+  --color-accent-600: #ab4b25;
+  --color-accent-700: #8c3c1d;
+  --color-accent-100: #f2d9c8;
+  --color-accent-50: #f8eade;
+
+  --color-ok: #4e7a55;
+  --color-ok-50: #e4ecdf;
+  --color-bad: #a6463a;
+  --color-bad-50: #f5e0da;
+  --color-gold: #a97c33;
+  --color-gold-50: #f4e8cf;
+
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+  --shadow-soft: 0 1px 2px rgb(48 37 31 / 0.04), 0 10px 30px -18px rgb(48 37 31 / 0.22);
+  --shadow-lift: 0 2px 6px rgb(48 37 31 / 0.06), 0 22px 48px -24px rgb(48 37 31 / 0.35);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  overflow-x: clip;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+::selection {
+  background: var(--color-accent-100);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Reading texts: comfortable measure */
+.prose-verba p {
+  margin-bottom: 1em;
+  line-height: 1.75;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+}
+
+/* Grid items may shrink below their content's width (truncated text, long titles). */
+.grid > * {
+  min-width: 0;
+}

@@ -1,0 +1,1035 @@
+import type { ListeningTrack, Question, Topic, ContentTopic, Level } from "@/domain/types";
+
+/** Builds mcq / gap Questions for one track. `notes` explain the wrong options in the order they appear. */
+const mk = (prefix: string, level: Level, theme: ContentTopic) => ({
+  mcq: (
+    n: number,
+    topic: Topic,
+    prompt: string,
+    options: string[],
+    correct: number,
+    notes: string[],
+    explanation: string,
+  ): Question => {
+    const optionNotes: Record<string, string> = {};
+    let k = 0;
+    options.forEach((o, i) => {
+      if (i !== correct) optionNotes[o] = notes[k++];
+    });
+    return {
+      id: `${prefix}-q${n}`,
+      skill: "listening",
+      topic,
+      level,
+      kind: "mcq",
+      prompt,
+      options,
+      answers: [options[correct]],
+      explanation,
+      optionNotes,
+      theme,
+    };
+  },
+  gap: (n: number, prompt: string, answers: string[], explanation: string): Question => ({
+    id: `${prefix}-q${n}`,
+    skill: "listening",
+    topic: "detail",
+    level,
+    kind: "gap",
+    prompt,
+    answers,
+    explanation,
+    theme,
+  }),
+});
+
+const a1 = mk("ls-01", "B2+", "business");
+const a2 = mk("ls-02", "C1", "environment");
+const a3 = mk("ls-03", "C1", "education");
+const a4 = mk("ls-04", "C1", "society");
+const a5 = mk("ls-05", "B2+", "current-affairs");
+const a6 = mk("ls-06", "C1+", "work");
+const a7 = mk("ls-07", "C1", "health");
+
+export const LISTENING: ListeningTrack[] = [
+  // ───────────────────────────── ls-01 ─────────────────────────────
+  {
+    id: "ls-01",
+    title: "The Delayed Launch",
+    format: "conversation",
+    level: "B2+",
+    theme: "business",
+    accents: ["British (RP)"],
+    context: "You will hear two colleagues discussing why a product launch has been postponed.",
+    segments: [
+      {
+        speaker: "Maya",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "Have you seen the email from Greg? Apparently the launch has been pushed back again, to the end of March.",
+      },
+      {
+        speaker: "Daniel",
+        lang: "en-GB",
+        pitch: 0.88,
+        text: "Yes, I read it this morning. Honestly, I’m not surprised. The thing is, we never had a realistic schedule to begin with. Marketing promised a date to the retailers before engineering had even finished testing.",
+      },
+      {
+        speaker: "Maya",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "Mind you, I don’t think it’s only about the schedule. When I spoke to Priyanka in the testing team, she said the real problem was a lack of communication. Nobody told her team about the last-minute design changes, so they spent two weeks checking features that had already been dropped.",
+      },
+      {
+        speaker: "Daniel",
+        lang: "en-GB",
+        pitch: 0.88,
+        text: "Two weeks! What a waste. I suppose that explains why the budget has gone over, too. Greg mentioned something about an extra forty thousand pounds.",
+      },
+      {
+        speaker: "Maya",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "Well, he said thirty-five, but it’s probably going to end up nearer forty. Anyway, what worries me more is the effect on the team. Some of the developers have been working weekends since January, and I think they’re close to burning out.",
+      },
+      {
+        speaker: "Daniel",
+        lang: "en-GB",
+        pitch: 0.88,
+        text: "That’s fair. I’ve suggested to Greg that we bring in a couple of freelancers to share the load, but he’s wary. He says it takes too long to get new people up to speed, and he’d rather keep the group small.",
+      },
+      {
+        speaker: "Maya",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "I see his point, but surely a short delay now is better than losing good people later? Perhaps we could ask for a compromise: hire one freelancer on a three-month contract, just to handle the testing.",
+      },
+      {
+        speaker: "Daniel",
+        lang: "en-GB",
+        pitch: 0.88,
+        text: "That might work. He’s more likely to agree if we present it as a way of protecting the new date rather than as an extra expense. Shall we draft something together this afternoon?",
+      },
+      {
+        speaker: "Maya",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "Good idea. I’m free after lunch, around two. And if he still says no, we could go to Helen in HR, though I’d rather not go over his head unless we have to.",
+      },
+      {
+        speaker: "Daniel",
+        lang: "en-GB",
+        pitch: 0.88,
+        text: "Agreed. Let’s give him one chance to say yes first.",
+      },
+    ],
+    questions: [
+      a1.mcq(
+        1,
+        "main-idea",
+        "What are the speakers mainly discussing?",
+        [
+          "The reasons for a delay and how to respond to it",
+          "How to persuade retailers to accept a later date",
+          "Whether the testing team should be replaced",
+          "Plans for a weekend of extra work",
+        ],
+        0,
+        [
+          "Retailers are mentioned only as the people Marketing made promises to.",
+          "Priyanka’s team is described as a victim of poor communication, not as a problem to be replaced.",
+          "Weekend work is mentioned as a symptom, not as a plan.",
+        ],
+        "They discuss why the launch has been “pushed back again” and then what they could suggest to Greg.",
+      ),
+      a1.gap(
+        2,
+        "Maya says the real problem was a lack of ____.",
+        ["communication"],
+        "Maya: “she said the real problem was a lack of communication.”",
+      ),
+      a1.gap(
+        3,
+        "The testing team spent ____ checking features that had been dropped.",
+        ["two weeks", "2 weeks"],
+        "Maya: “they spent two weeks checking features that had already been dropped.”",
+      ),
+      a1.mcq(
+        4,
+        "detail",
+        "Why is Greg unwilling to hire freelancers?",
+        [
+          "He thinks newcomers take too long to become effective.",
+          "He believes they are too expensive.",
+          "He wants the team to be paid for weekend work instead.",
+          "He thinks the delay will be only a few days.",
+        ],
+        0,
+        [
+          "Cost is a general worry, but Greg’s stated reason is the time it takes to train people.",
+          "Weekend pay is never discussed.",
+          "The delay is already to the end of March; nothing suggests it is short.",
+        ],
+        "Daniel: “He says it takes too long to get new people up to speed.”",
+      ),
+      a1.mcq(
+        5,
+        "attitude",
+        "How does Maya feel about the developers?",
+        [
+          "Concerned that they may become exhausted",
+          "Annoyed that they have not met the deadline",
+          "Confident that they can finish on time",
+          "Grateful that they have agreed to work weekends",
+        ],
+        0,
+        [
+          "She does not blame them; she is worried about them.",
+          "She is not confident; she talks about “burning out”.",
+          "No thanks are expressed, and nothing suggests they agreed freely.",
+        ],
+        "Maya: “Some of the developers have been working weekends since January, and I think they’re close to burning out.”",
+      ),
+      a1.mcq(
+        6,
+        "inference",
+        "What do the speakers decide to do?",
+        [
+          "Suggest hiring one freelancer for a limited period",
+          "Go straight to the HR manager",
+          "Ask Greg to cancel the launch",
+          "Hire several freelancers without telling Greg",
+        ],
+        0,
+        [
+          "Helen is only a fallback “if he still says no”.",
+          "Nobody mentions cancelling the launch.",
+          "They plan to persuade Greg, not to go behind him: “I’d rather not go over his head.”",
+        ],
+        "Maya: “hire one freelancer on a three-month contract”; Daniel: “Shall we draft something together this afternoon?”",
+      ),
+    ],
+  },
+
+  // ───────────────────────────── ls-02 ─────────────────────────────
+  {
+    id: "ls-02",
+    title: "The Meadows Under the Waves",
+    format: "interview",
+    level: "C1",
+    theme: "environment",
+    accents: ["British (RP)", "Australian"],
+    context: "You will hear part of a radio interview with a marine biologist who is talking about seagrass.",
+    segments: [
+      {
+        speaker: "Helen",
+        lang: "en-GB",
+        pitch: 1.08,
+        text: "Now, when we talk about tackling climate change, we tend to think of forests. But my guest today, marine biologist Dr Lachlan Ford, would like us to look a little closer to the shore. Lachlan, welcome. Seagrass. Why should we care?",
+      },
+      {
+        speaker: "Lachlan",
+        lang: "en-AU",
+        pitch: 0.9,
+        text: "Thanks, Helen. Well, the short answer is that it’s one of the most efficient carbon stores on the planet. Per hectare, a seagrass meadow can hold up to thirty times more carbon than a rainforest, and, crucially, it locks it away in the sediment, where it can stay for centuries. The trouble is that almost nobody knows it’s there.",
+      },
+      {
+        speaker: "Helen",
+        lang: "en-GB",
+        pitch: 1.08,
+        text: "And I gather the meadows are disappearing.",
+      },
+      {
+        speaker: "Lachlan",
+        lang: "en-AU",
+        pitch: 0.9,
+        text: "They are, and faster than most people realise. We’ve lost roughly a third of the world’s seagrass since the nineteen-forties. The main culprit isn’t climate change itself, as you might expect, but pollution from farmland. Fertiliser washes into the sea, algae bloom, and the water becomes so cloudy that the plants can’t get enough light.",
+      },
+      {
+        speaker: "Helen",
+        lang: "en-GB",
+        pitch: 1.08,
+        text: "So it’s the murky water that does the damage.",
+      },
+      {
+        speaker: "Lachlan",
+        lang: "en-AU",
+        pitch: 0.9,
+        text: "Exactly. Which, interestingly, is also where the good news lies, because water quality is something we can actually influence. On the Welsh coast, for example, volunteers have been planting seeds by hand, and they’ve already restored several hectares.",
+      },
+      {
+        speaker: "Helen",
+        lang: "en-GB",
+        pitch: 1.08,
+        text: "Is that realistic on a large scale, though? Hand-planting sounds rather labour-intensive.",
+      },
+      {
+        speaker: "Lachlan",
+        lang: "en-AU",
+        pitch: 0.9,
+        text: "It is, and I won’t pretend otherwise. Planting is only part of the answer. If the water stays polluted, you’ve wasted your effort. What we really need is for farmers and councils to reduce runoff, and for governments to protect the meadows legally, which at the moment very few do.",
+      },
+      {
+        speaker: "Helen",
+        lang: "en-GB",
+        pitch: 1.08,
+        text: "So where does that leave the individual listener?",
+      },
+      {
+        speaker: "Lachlan",
+        lang: "en-AU",
+        pitch: 0.9,
+        text: "Honestly? Don’t anchor your boat on a meadow. Anchors tear up the roots, and it can take decades to recover. And talk about it. A habitat nobody can name is a habitat nobody will defend.",
+      },
+      {
+        speaker: "Helen",
+        lang: "en-GB",
+        pitch: 1.08,
+        text: "A good note to end on. Dr Lachlan Ford, thank you.",
+      },
+    ],
+    questions: [
+      a2.mcq(
+        1,
+        "main-idea",
+        "What point does Lachlan make in his first answer?",
+        [
+          "Seagrass stores a great deal of carbon but is little known.",
+          "Seagrass meadows are more widespread than rainforests.",
+          "Forests are less important than people think.",
+          "Seagrass is the main cause of rising sea levels.",
+        ],
+        0,
+        [
+          "He talks about how much carbon they hold per hectare, not about their extent.",
+          "He compares carbon storage but does not dismiss forests.",
+          "Sea levels are never mentioned.",
+        ],
+        "Lachlan: “one of the most efficient carbon stores on the planet… almost nobody knows it’s there.”",
+      ),
+      a2.gap(
+        2,
+        "Seagrass locks carbon away in the ____.",
+        ["sediment"],
+        "Lachlan: “it locks it away in the sediment, where it can stay for centuries.”",
+      ),
+      a2.mcq(
+        3,
+        "detail",
+        "According to Lachlan, what is the main cause of seagrass loss?",
+        [
+          "Pollution from farmland",
+          "Climate change",
+          "Damage from boats’ propellers",
+          "Over-harvesting by fishing communities",
+        ],
+        0,
+        [
+          "He says it is “isn’t climate change itself, as you might expect”.",
+          "Propellers are not mentioned; only anchors are, in the advice for listeners.",
+          "Harvesting is not mentioned.",
+        ],
+        "Lachlan: “The main culprit isn’t climate change itself… but pollution from farmland.”",
+      ),
+      a2.gap(
+        4,
+        "On the Welsh coast, volunteers have been planting seagrass seeds by ____.",
+        ["hand"],
+        "Lachlan: “volunteers have been planting seeds by hand.”",
+      ),
+      a2.mcq(
+        5,
+        "attitude",
+        "How does Lachlan respond to Helen’s comment about hand-planting?",
+        [
+          "He admits its limitations and says other action is needed.",
+          "He claims it is the only realistic solution.",
+          "He says that it should be replaced by machines.",
+          "He rejects the criticism as unfair.",
+        ],
+        0,
+        [
+          "He says “Planting is only part of the answer.”",
+          "Machines are not mentioned.",
+          "He agrees: “It is, and I won’t pretend otherwise.”",
+        ],
+        "Lachlan: “It is, and I won’t pretend otherwise. Planting is only part of the answer.”",
+      ),
+      a2.gap(
+        6,
+        "Anchors tear up the roots, and it can take ____ for seagrass to recover.",
+        ["decades"],
+        "Lachlan: “Anchors tear up the roots, and it can take decades to recover.”",
+      ),
+    ],
+  },
+
+  // ───────────────────────────── ls-03 ─────────────────────────────
+  {
+    id: "ls-03",
+    title: "Why Cramming Fails",
+    format: "lecture",
+    level: "C1",
+    theme: "education",
+    accents: ["American"],
+    context: "You will hear part of a university lecture about how people learn.",
+    segments: [
+      {
+        speaker: "Professor Marsh",
+        lang: "en-US",
+        pitch: 0.95,
+        text: "Good morning, everyone. Today I want to talk about something that most of you do every semester and, I suspect, do rather badly: revising. The standard approach, as I’m sure you know, is cramming. You leave everything until the night before, reread your notes five or six times, and by the morning it all feels wonderfully familiar. The trouble is that familiarity isn’t the same thing as knowledge.",
+      },
+      {
+        speaker: "Professor Marsh",
+        lang: "en-US",
+        pitch: 0.95,
+        text: "The psychologist Robert Bjork has a useful term for this. He talks about desirable difficulties: conditions that make learning feel harder in the moment but make it last longer. Take spacing. If you study the same material in three short sessions across a fortnight rather than in one long session, you’ll feel less confident at the end of each sitting, but you’ll remember considerably more a month later.",
+      },
+      {
+        speaker: "Professor Marsh",
+        lang: "en-US",
+        pitch: 0.95,
+        text: "A second difficulty is testing yourself. In one classic study, students who read a passage once and then tried to write down everything they could recall outperformed students who read it four times. Rereading gives you the illusion of mastery. Retrieval gives you the real thing. Yes, Jason?",
+      },
+      {
+        speaker: "Jason",
+        lang: "en-US",
+        pitch: 1.12,
+        text: "Sorry, but doesn’t that depend on the subject? I mean, surely maths is different from, say, history?",
+      },
+      {
+        speaker: "Professor Marsh",
+        lang: "en-US",
+        pitch: 0.95,
+        text: "Good question. The effects have been shown across a wide range of subjects, though they’re stronger for factual material than for complex problem solving. For maths, the equivalent is mixing up different kinds of problem in a single session, rather than practising one type until you can do it in your sleep. It feels messier, but it forces you to choose the right method, which is precisely what an exam asks of you.",
+      },
+      {
+        speaker: "Professor Marsh",
+        lang: "en-US",
+        pitch: 0.95,
+        text: "So, practical advice. Start revising earlier than feels necessary, even if only twenty minutes a day. Close the book and test yourself. And when it feels difficult, resist the temptation to conclude that it isn’t working. That difficulty is the point. Next week we’ll look at sleep, which turns out to matter more than most of us would like to admit.",
+      },
+    ],
+    questions: [
+      a3.mcq(
+        1,
+        "main-idea",
+        "What is the lecturer’s main message?",
+        [
+          "Learning that feels difficult is often more effective in the long term.",
+          "Students should avoid revising until shortly before an exam.",
+          "Maths requires a completely different approach from other subjects.",
+          "Rereading notes is the most reliable way to remember them.",
+        ],
+        0,
+        [
+          "That is cramming, which she criticises.",
+          "She says that the same principle applies to maths, with a different method.",
+          "She says rereading “gives you the illusion of mastery”.",
+        ],
+        "“Desirable difficulties: conditions that make learning feel harder in the moment but make it last longer.”",
+      ),
+      a3.gap(
+        2,
+        "Cramming produces a feeling of ____ that is not the same as knowledge.",
+        ["familiarity"],
+        "Lecturer: “by the morning it all feels wonderfully familiar. The trouble is that familiarity isn’t the same thing as knowledge.”",
+      ),
+      a3.mcq(
+        3,
+        "detail",
+        "What happens when students study in several short sessions over two weeks?",
+        [
+          "They feel less sure at first but remember more later.",
+          "They feel more confident and remember more immediately.",
+          "They remember the same amount as students who cram.",
+          "They finish their revision faster.",
+        ],
+        0,
+        [
+          "She says they “feel less confident at the end of each sitting”.",
+          "She says they remember “considerably more a month later”.",
+          "No claim is made about speed.",
+        ],
+        "“You’ll feel less confident at the end of each sitting, but you’ll remember considerably more a month later.”",
+      ),
+      a3.gap(
+        4,
+        "In the study, students who tried to write down everything they could ____ did better than those who read the passage four times.",
+        ["recall"],
+        "Lecturer: “tried to write down everything they could recall outperformed students who read it four times.”",
+      ),
+      a3.mcq(
+        5,
+        "inference",
+        "How does the lecturer respond to Jason’s question?",
+        [
+          "She says the effects vary but do apply to maths with a different technique.",
+          "She says he is wrong and the effects are identical for all subjects.",
+          "She says the research does not apply to maths.",
+          "She says she will answer it next week.",
+        ],
+        0,
+        [
+          "She says the effects are “stronger for factual material than for complex problem solving”.",
+          "She gives maths an equivalent technique.",
+          "Next week’s topic is sleep, not this question.",
+        ],
+        "“Stronger for factual material than for complex problem solving. For maths, the equivalent is mixing up different kinds of problem.”",
+      ),
+      a3.gap(
+        6,
+        "For maths, she recommends mixing up different kinds of ____ in a single session.",
+        ["problem", "problems"],
+        "Lecturer: “mixing up different kinds of problem in a single session.”",
+      ),
+    ],
+  },
+
+  // ───────────────────────────── ls-04 ─────────────────────────────
+  {
+    id: "ls-04",
+    title: "Closing the Old Town to Cars",
+    format: "discussion",
+    level: "C1",
+    theme: "society",
+    accents: ["British (RP)", "Irish", "Canadian"],
+    context: "You will hear three people discussing whether cars should be banned from a city centre.",
+    segments: [
+      {
+        speaker: "Charlotte",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "Right, so the council is consulting on closing the old town to private cars entirely. Siobhán, you run a bakery there, so I’d imagine you have strong feelings.",
+      },
+      {
+        speaker: "Siobhán",
+        lang: "en-IE",
+        pitch: 1.05,
+        text: "I do, and they’re more mixed than people expect. On the one hand, I’d love the pavements to be quieter, and I know customers who would linger longer if they weren’t dodging vans. On the other hand, a lot of my regulars are elderly and they drive in. If you take away their parking, I’m worried they just won’t come.",
+      },
+      {
+        speaker: "Ryan",
+        lang: "en-CA",
+        pitch: 0.88,
+        text: "See, I’d challenge that. When we pedestrianised the main street back home in Halifax, there was exactly the same panic. Traders predicted ruin. In the end, takings went up for most of them, because people who walk past a shop notice it, and people who drive past don’t. The key was making sure there was decent public transport and a proper drop-off point for people with limited mobility.",
+      },
+      {
+        speaker: "Charlotte",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "But that’s rather my concern. Halifax is a different animal. Our buses are unreliable and the shops aren’t that close to the station. I think if you ban cars before you fix the buses, you’re asking for resentment, and then the whole idea is discredited for a generation.",
+      },
+      {
+        speaker: "Ryan",
+        lang: "en-CA",
+        pitch: 0.88,
+        text: "That’s a fair point, though you could argue that you’ll never fix the buses while there’s no pressure to. Nobody ever invests in an alternative until the status quo becomes uncomfortable.",
+      },
+      {
+        speaker: "Siobhán",
+        lang: "en-IE",
+        pitch: 1.05,
+        text: "Possibly, but I’d settle for a trial. Close the streets on Saturdays for six months, measure what happens to footfall, and share the numbers honestly. If it works, I’ll be the first to say so. If it doesn’t, we shouldn’t be too proud to say that as well.",
+      },
+      {
+        speaker: "Charlotte",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "A trial is sensible. I suppose my only worry is that six months is too short to judge, because people’s habits take a while to change.",
+      },
+      {
+        speaker: "Ryan",
+        lang: "en-CA",
+        pitch: 0.88,
+        text: "Then make it a year. Nobody ever made a good decision on three weeks of data.",
+      },
+      {
+        speaker: "Charlotte",
+        lang: "en-GB",
+        pitch: 1.1,
+        text: "Well, on that, we can all agree.",
+      },
+    ],
+    questions: [
+      a4.mcq(
+        1,
+        "detail",
+        "What is Siobhán’s main concern about a ban?",
+        [
+          "Some of her older customers might stop coming.",
+          "Her bakery would lose its delivery service.",
+          "Noise from the pedestrians would increase.",
+          "The council would raise her rent.",
+        ],
+        0,
+        [
+          "Vans are mentioned only as something customers have to dodge.",
+          "She actually wants “the pavements to be quieter”.",
+          "Rent is never mentioned.",
+        ],
+        "Siobhán: “a lot of my regulars are elderly and they drive in. If you take away their parking, I’m worried they just won’t come.”",
+      ),
+      a4.gap(
+        2,
+        "Ryan says that when the main street in Halifax was pedestrianised, takings ____ for most traders.",
+        ["went up", "rose", "increased"],
+        "Ryan: “takings went up for most of them.”",
+      ),
+      a4.mcq(
+        3,
+        "inference",
+        "What is Charlotte’s worry about banning cars?",
+        [
+          "It could cause lasting opposition if public transport is still poor.",
+          "It would be too expensive for the council.",
+          "It would encourage shoppers to travel by taxi.",
+          "It has never worked in any city.",
+        ],
+        0,
+        [
+          "Costs are not mentioned.",
+          "Taxis are not mentioned.",
+          "She does not deny that it can work; her concern is timing and local conditions.",
+        ],
+        "Charlotte: “if you ban cars before you fix the buses, you’re asking for resentment, and then the whole idea is discredited for a generation.”",
+      ),
+      a4.gap(
+        4,
+        "Siobhán proposes closing the streets on ____ for six months.",
+        ["saturdays", "saturday"],
+        "Siobhán: “Close the streets on Saturdays for six months.”",
+      ),
+      a4.mcq(
+        5,
+        "attitude",
+        "How does Ryan react to Charlotte’s point about the buses?",
+        [
+          "He partly accepts it but argues that pressure is needed to improve them.",
+          "He dismisses it as irrelevant.",
+          "He agrees that the ban should be postponed.",
+          "He admits that he has never used public transport.",
+        ],
+        0,
+        [
+          "He says “That’s a fair point”.",
+          "He argues that “Nobody ever invests in an alternative until the status quo becomes uncomfortable”, which is the opposite of postponing.",
+          "His own experience is of Halifax’s system working after the ban.",
+        ],
+        "Ryan: “That’s a fair point, though you could argue that you’ll never fix the buses while there’s no pressure to.”",
+      ),
+      a4.gap(
+        6,
+        "Ryan thinks the trial should last ____.",
+        ["a year", "one year", "12 months"],
+        "Ryan: “Then make it a year.”",
+      ),
+    ],
+  },
+
+  // ───────────────────────────── ls-05 ─────────────────────────────
+  {
+    id: "ls-05",
+    title: "A Charge for Keldara",
+    format: "news",
+    level: "B2+",
+    theme: "current-affairs",
+    accents: ["Indian", "Canadian"],
+    context: "You will hear a news report about a new daily charge for visitors to a popular island.",
+    segments: [
+      {
+        speaker: "Priya",
+        lang: "en-IN",
+        pitch: 1.0,
+        text: "Our top story this evening: visitors to the island of Keldara will, from next summer, have to pay a daily charge of five euros per person, as the local government tries to cope with record numbers of tourists. The measure was approved late last night after a heated debate in the regional parliament. Our correspondent Anna Brooks is on the island. Anna, how has the news been received?",
+      },
+      {
+        speaker: "Anna",
+        lang: "en-CA",
+        pitch: 0.95,
+        text: "Well, Priya, opinion here is sharply divided. I’m standing on the harbour front, which would normally be packed at this time of year, and even now, outside the main season, there’s a queue of cruise passengers stretching right along the quay. Residents say the island simply wasn’t built for this. Around four thousand people live here year-round, but last August more than sixty thousand visitors arrived.",
+      },
+      {
+        speaker: "Priya",
+        lang: "en-IN",
+        pitch: 1.0,
+        text: "And what do the officials say the money will be used for?",
+      },
+      {
+        speaker: "Anna",
+        lang: "en-CA",
+        pitch: 0.95,
+        text: "The mayor, Tomas Reyes, told me that roughly half the revenue will go on repairing footpaths and improving waste collection, which has been struggling to keep up. The rest will fund a housing scheme for local workers, many of whom can no longer afford to rent on the island because landlords prefer short holiday lets.",
+      },
+      {
+        speaker: "Priya",
+        lang: "en-IN",
+        pitch: 1.0,
+        text: "Are hotel owners supportive?",
+      },
+      {
+        speaker: "Anna",
+        lang: "en-CA",
+        pitch: 0.95,
+        text: "Not entirely. The hoteliers’ association argues that the charge will put off families on a budget, and that day-trippers, who spend little, will simply pay and carry on as before. They’d prefer a limit on the number of cruise ships. The mayor says that’s something he’s considering, but it would need agreement from the port authority, which could take years.",
+      },
+      {
+        speaker: "Priya",
+        lang: "en-IN",
+        pitch: 1.0,
+        text: "Anna, thank you. The charge will be reviewed after twelve months. Now, to the weather.",
+      },
+    ],
+    questions: [
+      a5.gap(
+        1,
+        "Last August, more than ____ visitors arrived on the island.",
+        ["sixty thousand", "60,000", "60000"],
+        "Anna: “last August more than sixty thousand visitors arrived.”",
+      ),
+      a5.mcq(
+        2,
+        "detail",
+        "What will about half of the money be spent on?",
+        [
+          "Repairing footpaths and improving waste collection",
+          "Building new hotels for visitors",
+          "Reducing the number of cruise ships",
+          "Paying for a new housing scheme",
+        ],
+        0,
+        [
+          "Hotels are mentioned only in connection with the hoteliers’ objections.",
+          "A limit on cruise ships is something the mayor is “considering”, with no funding mentioned.",
+          "Housing takes “the rest”, which is the other half.",
+        ],
+        "Anna: “roughly half the revenue will go on repairing footpaths and improving waste collection.”",
+      ),
+      a5.mcq(
+        3,
+        "detail",
+        "Why can many local workers no longer afford to rent homes?",
+        [
+          "Landlords prefer to rent to holidaymakers.",
+          "Rents rose after the charge was approved.",
+          "Few new houses have been built on the island.",
+          "Most workers have moved to the mainland.",
+        ],
+        0,
+        [
+          "The charge has not yet been introduced; the problem already exists.",
+          "The number of houses built is never mentioned.",
+          "The problem is that they “can no longer afford to rent on the island”, not that they left.",
+        ],
+        "Anna: “many of whom can no longer afford to rent on the island because landlords prefer short holiday lets.”",
+      ),
+      a5.gap(
+        4,
+        "The hoteliers would prefer a limit on the number of ____ ships.",
+        ["cruise"],
+        "Anna: “They’d prefer a limit on the number of cruise ships.”",
+      ),
+      a5.mcq(
+        5,
+        "inference",
+        "What does Anna suggest about a limit on cruise ships?",
+        [
+          "It might not happen soon because another body must agree.",
+          "The mayor has completely rejected it.",
+          "It has already been approved by the port authority.",
+          "It would be cheaper than the daily charge.",
+        ],
+        0,
+        [
+          "The mayor says it is “something he’s considering”.",
+          "Approval “could take years”, so it has not been given.",
+          "Costs are not compared.",
+        ],
+        "Anna: “it would need agreement from the port authority, which could take years.”",
+      ),
+      a5.gap(
+        6,
+        "The charge will be reviewed after ____.",
+        ["twelve months", "a year", "12 months"],
+        "Priya: “The charge will be reviewed after twelve months.”",
+      ),
+    ],
+  },
+
+  // ───────────────────────────── ls-06 ─────────────────────────────
+  {
+    id: "ls-06",
+    title: "Leaving the Spreadsheet Behind",
+    format: "monologue",
+    level: "C1+",
+    theme: "work",
+    accents: ["Irish"],
+    context: "You will hear a man talking about his decision to change careers.",
+    segments: [
+      {
+        speaker: "Cormac",
+        lang: "en-IE",
+        pitch: 0.95,
+        text: "People always assume there was a dramatic moment. A breakdown in a boardroom, a sudden vow to quit. The truth is far more mundane. I was an actuary for fourteen years, and I was perfectly good at it. That was the problem, really. Nothing was ever wrong enough to make me leave. I had a decent salary, a pleasant team, and a vague sense that life was happening somewhere else.",
+      },
+      {
+        speaker: "Cormac",
+        lang: "en-IE",
+        pitch: 0.95,
+        text: "What changed things, oddly, was a conversation with my father. He was seventy-eight, and he’d spent most of his working life as a joiner in Cork. I was complaining about some spreadsheet, and he said, very gently, that he’d never once come home unable to show my mother what he’d done that day. I laughed it off at the time, but it stuck. I started going to furniture-making evening classes, partly out of curiosity and partly, if I’m honest, to prove him wrong.",
+      },
+      {
+        speaker: "Cormac",
+        lang: "en-IE",
+        pitch: 0.95,
+        text: "Of course, it didn’t prove him wrong. The first chair I made was dreadful. It wobbled, it was ugly, and it took me eleven weeks. But there was an astonishing satisfaction in sitting on it, even so, and in knowing exactly why it wobbled. In my old job, if a forecast turned out to be wrong, it might be years before anyone found out, and by then everyone had moved on.",
+      },
+      {
+        speaker: "Cormac",
+        lang: "en-IE",
+        pitch: 0.95,
+        text: "Leaving was frightening, naturally. I took a pay cut of more than half, and for the first year I questioned the decision almost weekly. What I hadn’t anticipated was how much I’d miss the intellectual side of things. A workshop is a lonely place, and you can’t discuss a dovetail joint with the postman. Mind you, I’ve found ways round that. I now teach one evening a week.",
+      },
+      {
+        speaker: "Cormac",
+        lang: "en-IE",
+        pitch: 0.95,
+        text: "I wouldn’t want to be too romantic about it. People who say that you should simply follow your passion tend to have a safety net they don’t mention. I had savings, and a partner with a steady income. But I do think we undervalue work that leaves something behind. I’m not saying everyone should pick up a chisel; I’m saying it’s worth asking what you’d have to show at the end of an ordinary Tuesday.",
+      },
+    ],
+    questions: [
+      a6.mcq(
+        1,
+        "main-idea",
+        "Why did the speaker stay in his first career for so long?",
+        [
+          "Nothing about it was bad enough to push him to leave.",
+          "He was afraid of losing his salary.",
+          "He had a very demanding manager.",
+          "He enjoyed it more than he realised.",
+        ],
+        0,
+        [
+          "Money fears come later, once he had left.",
+          "He describes “a pleasant team”.",
+          "He says “life was happening somewhere else”, so he was not enjoying it.",
+        ],
+        "Cormac: “Nothing was ever wrong enough to make me leave.”",
+      ),
+      a6.gap(
+        2,
+        "The speaker’s father worked as a ____ in Cork.",
+        ["joiner"],
+        "Cormac: “he’d spent most of his working life as a joiner in Cork.”",
+      ),
+      a6.mcq(
+        3,
+        "inference",
+        "What does the speaker imply about his reason for starting evening classes?",
+        [
+          "He partly wanted to show that his father’s remark was mistaken.",
+          "He wanted to start a business with his father.",
+          "He was forced to by his employer.",
+          "He hoped to earn extra money quickly.",
+        ],
+        0,
+        [
+          "His father had retired, and no joint business is mentioned.",
+          "The classes were his own choice.",
+          "Money is not mentioned as a motive at this stage.",
+        ],
+        "Cormac: “partly out of curiosity and partly, if I’m honest, to prove him wrong.”",
+      ),
+      a6.gap(
+        4,
+        "The first chair the speaker made took him ____.",
+        ["eleven weeks", "11 weeks"],
+        "Cormac: “it wobbled, it was ugly, and it took me eleven weeks.”",
+      ),
+      a6.mcq(
+        5,
+        "detail",
+        "What did the speaker not expect when he changed career?",
+        [
+          "That he would miss the intellectual stimulation",
+          "That he would earn so much less",
+          "That his old colleagues would stop speaking to him",
+          "That furniture-making would be so difficult",
+        ],
+        0,
+        [
+          "He did take a big pay cut, and he talks about it as part of the frightening decision.",
+          "He does not say that colleagues stopped speaking to him.",
+          "The first chair was “dreadful”, but he does not say that he was surprised by this.",
+        ],
+        "Cormac: “What I hadn’t anticipated was how much I’d miss the intellectual side of things.”",
+      ),
+      a6.mcq(
+        6,
+        "attitude",
+        "What is the speaker’s attitude to the advice to “follow your passion”?",
+        [
+          "Sceptical, because it ignores financial security",
+          "Enthusiastic, because it worked for him",
+          "Critical of anyone who gives up an office job",
+          "Uncertain whether it is good advice for anyone",
+        ],
+        0,
+        [
+          "He says people who give such advice “tend to have a safety net they don’t mention”.",
+          "He does not say everyone should change jobs: “I’m not saying everyone should pick up a chisel.”",
+          "He is clear about the problem: the safety net is missing from the advice.",
+        ],
+        "Cormac: “People who say that you should simply follow your passion tend to have a safety net they don’t mention. I had savings, and a partner with a steady income.”",
+      ),
+    ],
+  },
+
+  // ───────────────────────────── ls-07 ─────────────────────────────
+  {
+    id: "ls-07",
+    title: "Trying Too Hard to Sleep",
+    format: "interview",
+    level: "C1",
+    theme: "health",
+    accents: ["Canadian", "Indian"],
+    context: "You will hear an interview with a sleep specialist who has written a book about insomnia.",
+    segments: [
+      {
+        speaker: "Dana",
+        lang: "en-CA",
+        pitch: 1.1,
+        text: "With me today is Dr Anil Mehta, a sleep specialist whose new book argues that we’ve been giving the wrong advice about insomnia for decades. Dr Mehta, that’s quite a claim.",
+      },
+      {
+        speaker: "Dr Mehta",
+        lang: "en-IN",
+        pitch: 0.9,
+        text: "It is, and I’ll try to justify it. For years the standard advice has been about hygiene: no screens, a cool room, no coffee after noon. None of that is wrong. But in my clinic, I find that it often makes people more anxious, because they begin to treat sleep as a performance. They lie there thinking, I have done everything correctly, so why can’t I sleep?",
+      },
+      {
+        speaker: "Dana",
+        lang: "en-CA",
+        pitch: 1.1,
+        text: "So the effort itself becomes the problem.",
+      },
+      {
+        speaker: "Dr Mehta",
+        lang: "en-IN",
+        pitch: 0.9,
+        text: "Precisely. Sleep is one of the few things you can’t achieve by trying harder. What does work, in my experience, is something called sleep restriction, which sounds alarming. Essentially, you limit the time you spend in bed to the hours you actually sleep, say five and a half, and you extend it gradually as your sleep becomes more consolidated.",
+      },
+      {
+        speaker: "Dana",
+        lang: "en-CA",
+        pitch: 1.1,
+        text: "That sounds miserable.",
+      },
+      {
+        speaker: "Dr Mehta",
+        lang: "en-IN",
+        pitch: 0.9,
+        text: "The first week or two is, I won’t deny it. You’re tired, and you’re irritable. But about seventy per cent of my patients notice a real improvement within a month, and the effect lasts far longer than tablets, which tend to lose their effect after a few weeks.",
+      },
+      {
+        speaker: "Dana",
+        lang: "en-CA",
+        pitch: 1.1,
+        text: "Is there anyone who shouldn’t try it?",
+      },
+      {
+        speaker: "Dr Mehta",
+        lang: "en-IN",
+        pitch: 0.9,
+        text: "Yes, and it matters. People with certain conditions, such as epilepsy, or those who drive for a living, should only do this under medical supervision, because the early sleepiness can be dangerous. Which is why I’m rather uneasy about the way it’s been picked up on social media, where people tend to leave out the caveats.",
+      },
+      {
+        speaker: "Dana",
+        lang: "en-CA",
+        pitch: 1.1,
+        text: "Finally, a quick tip for tonight?",
+      },
+      {
+        speaker: "Dr Mehta",
+        lang: "en-IN",
+        pitch: 0.9,
+        text: "If you’re awake for more than twenty minutes, get up. Go to another room, do something dull, and go back when you’re sleepy. Your bed should be associated with sleeping, not with worrying.",
+      },
+    ],
+    questions: [
+      a7.mcq(
+        1,
+        "main-idea",
+        "What is Dr Mehta’s main criticism of the standard advice on insomnia?",
+        [
+          "It can make people anxious about sleeping.",
+          "It is based on out-of-date research.",
+          "It tells people to take tablets.",
+          "It is completely wrong in every respect.",
+        ],
+        0,
+        [
+          "He does not talk about the age of the research.",
+          "Tablets are discussed later, as a comparison.",
+          "He says “None of that is wrong”.",
+        ],
+        "Dr Mehta: “it often makes people more anxious, because they begin to treat sleep as a performance.”",
+      ),
+      a7.gap(
+        2,
+        "At first, patients limit their time in bed to about ____ hours.",
+        ["five and a half", "5.5", "5 and a half"],
+        "Dr Mehta: “you limit the time you spend in bed to the hours you actually sleep, say five and a half.”",
+      ),
+      a7.mcq(
+        3,
+        "detail",
+        "How does Dr Mehta compare sleep restriction with tablets?",
+        [
+          "Its effect lasts longer.",
+          "It works faster.",
+          "It is easier at the beginning.",
+          "It is more expensive.",
+        ],
+        0,
+        [
+          "He says the first weeks are difficult, and nothing is said about speed against tablets.",
+          "He admits that the first week or two are “miserable”.",
+          "Costs are not discussed.",
+        ],
+        "Dr Mehta: “the effect lasts far longer than tablets, which tend to lose their effect after a few weeks.”",
+      ),
+      a7.gap(
+        4,
+        "Around seventy per cent of patients notice an improvement within a ____.",
+        ["month"],
+        "Dr Mehta: “about seventy per cent of my patients notice a real improvement within a month.”",
+      ),
+      a7.mcq(
+        5,
+        "attitude",
+        "How does Dr Mehta feel about the treatment’s popularity on social media?",
+        [
+          "Concerned that important warnings are left out",
+          "Pleased that so many people are discussing it",
+          "Annoyed that doctors are not consulted",
+          "Doubtful that it works at all",
+        ],
+        0,
+        [
+          "He is “rather uneasy”.",
+          "His complaint is about caveats being omitted, not about being ignored.",
+          "He has just said that most patients improve.",
+        ],
+        "Dr Mehta: “I’m rather uneasy about the way it’s been picked up on social media, where people tend to leave out the caveats.”",
+      ),
+      a7.gap(
+        6,
+        "Dr Mehta advises getting up if you are awake for more than ____ minutes.",
+        ["twenty", "20"],
+        "Dr Mehta: “If you’re awake for more than twenty minutes, get up.”",
+      ),
+    ],
+  },
+];
